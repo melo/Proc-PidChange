@@ -108,6 +108,9 @@ You can disable real-time detection by setting the
 C<PROC_PIDCHANGE_NO_RT> environment to true before loading
 L<Proc::PidChange>.
 
+Be aware that you should add L<POSIX::AtFork> to your dependencies, this
+modules doesn't require it.
+
 
 =head1 FUNCTIONS
 
@@ -129,5 +132,11 @@ called twice.
 =head2 unregister_pid_change_callback
 
 Unregister one or more callbacks.
+
+
+=head1 SEE ALSO
+
+L<POSIX::AtFork>
+
 
 =cut
