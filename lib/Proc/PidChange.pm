@@ -16,6 +16,17 @@ our %EXPORT_TAGS = (
   registry => [qw(register_pid_change_callback unregister_pid_change_callback)],
 );
 
+## Flag: if true, no need to pool for changes
+our $RT = 0;
+unless ($ENV{PROC_PIDCHANGE_NO_RT}) {
+  eval {
+    require POSIX::AtFork;
+    POSIX::AtFork->import();
+    POSIX::AtFork->add_to_child(\&check_current_pid);
+    $RT++;
+  };
+}
+
 
 ### Our implementation
 {
