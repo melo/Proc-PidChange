@@ -17,6 +17,7 @@ our %EXPORT_TAGS = (
 );
 
 
+### Our implementation
 {
   ### Our state
   our $last_checked_pid;
@@ -27,6 +28,7 @@ our %EXPORT_TAGS = (
   ### Check for pid changes
   sub check_current_pid {
     return if $last_checked_pid == $$;
+    $last_checked_pid = $$;
     return _call_all_callbacks();
   }
 

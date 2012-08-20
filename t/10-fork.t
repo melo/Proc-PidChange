@@ -32,6 +32,7 @@ if ($pid) {    ## parent
   waitpid($pid, 0);
 }
 else {         ## child
+  check_current_pid();    ## second call is a no-op
   close($reader);
   print $writer Dumper(\%calls);
   close($writer);
