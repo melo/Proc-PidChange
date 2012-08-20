@@ -1,6 +1,6 @@
 package Proc::PidChange;
 
-# ABSTRACT: a very cool module
+# ABSTRACT: execute callbacks when PID changes
 # VERSION
 # AUTHORITY
 
@@ -64,3 +64,70 @@ unless ($ENV{PROC_PIDCHANGE_NO_RT}) {
 
 
 1;
+
+=encoding utf8
+
+=head1 SYNOPSIS
+
+    use Proc::PidChange;
+
+    ## check for pid changes
+    check_current_pid();
+
+    ## Registration of callbacks
+    use Proc::PidChange ':all';
+
+    register_pid_change_callback(sub { ... });
+
+
+=head1 DESCRIPTION
+
+This module provides a simple API to check if the process ID changed,
+due to a fork() call. If such change is detected, it calls all the
+registered callbacks.
+
+The detection of PID changes can be done in two ways: in real-time as
+soon as it changes, or by calling L</check_current_pid> on a regular
+basis. The real-time version requires the L<POSIX::AtFork> module.
+
+Interested parties should use the L</register_pid_change_callback> to
+register a CodeRef to be called when the PID change is detected.
+
+
+=head2 About real-time PID changes
+
+Given that real-time is the most efficient method to detect PID changes,
+we aggresively try to load L<POSIX::AtFork> module and if found, enable
+real-time PID detection.
+
+You can check to see if real-time detection is being used with the
+C<$Proc::PidChange::RT> variable. If true, real-time detection is
+available.
+
+You can disable real-time detection by setting the
+C<PROC_PIDCHANGE_NO_RT> environment to true before loading
+L<Proc::PidChange>.
+
+
+=head1 FUNCTIONS
+
+=head2 check_current_pid
+
+Check the current PID to see if it's changed. If yes, calls all
+registered callbacks.
+
+
+=head2 register_pid_change_callback
+
+Register one or more callbacks to be called when the PID change
+is detected.
+
+If you register the same CodeRef callback twice, it will be
+called twice.
+
+
+=head2 unregister_pid_change_callback
+
+Unregister one or more callbacks.
+
+=cut
